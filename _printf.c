@@ -2,22 +2,60 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <stdio.h>
+
+void print_buffer(char buffer[], int *buff_ind);
+
 /**
- * _printf - function that produces output according to a format
- * @format:  is a character string.
- * Return: value
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
  */
 int _printf(const char *format, ...)
 {
-int chars_printed;
-conver_t function_list[] = {{"c", print_char}, {"s", print_string}, {"%", print_percent}, {"d", print_int}, {"i", print_int}, {NULL, NULL}};
-va_list args;
+int i, printed = 0, printed_chars = 0;
+int buff_ind = 0;
+va_list list;
+char buffer[BUFF_SIZE];
 if (format == NULL)
-{
 return (-1);
-};
-va_start(args, format);
-chars_printed = parser(format, function_list, args);
-va_end(args);
-return (chars_printed);
+va_start(list, format);
+for (i = 0; format && format[i] != '\0'; i++)
+{
+if (format[i] != '%')
+{
+buffer[buff_ind++] = format[i];
+if (buff_ind == BUFF_SIZE)
+{
+print_buffer(buffer, &buff_ind);
+printed_chars++;
+}
+else
+{
+print_buffer(buffer, &buff_ind);
+flags = get_flags(format, &i);
+width = get_width(format, &i, list);
+precision = get_precision(format, &i, list);
+size = get_size(format, &i);
+++i;
+printed = handle_print(format, &i, list, buffer, flags, width, precision, size);
+if (printed == -1)
+return (-1);
+printed_chars += printed;
+}
+}
+print_buffer(buffer, &buff_ind);
+va_end(list);
+return (printed_chars);
+}
+/**
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
+ */
+void print_buffer(char buffer[], int *buff_ind)
+{
+if (*buff_ind > 0)
+write(1, &buffer[0], *buff_ind);
+*buff_ind = 0;
+}
 }

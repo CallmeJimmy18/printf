@@ -22,7 +22,7 @@
 struct fmt
 {
 char fmt;
-int (*fn)(va_list);
+int (*fn)(va_list, char[], int, int, int, int);
 };
 struct convert
 {
@@ -42,14 +42,19 @@ int handle_print(const char *fmt, int *i,
 va_list list, char buffer[], int flags, int width, int precision, int size);
 //// FUNCTIONS
 // Funtions to print chars and strings
-int print_char(va_list args);
-int print_string(va_list args);
-int print_percent(__attribute__((unused))va_list args);
+int print_char(va_list types, char buffer[],
+int flags, int width, int precision, int size);
+int print_string(va_list types, char buffer[],
+int flags, int width, int precision, int size);
+int print_percent(va_list types, char buffer[],
+int flags, int width, int precision, int size);
 int _putchar(char c);
 // Functions to print numbers
 int print_number(va_list args);
-int print_int(va_list args);
-int print_binary(va_list args);
+int print_int(va_list types, char buffer[],
+int flags, int width, int precision, int size);
+int print_binary(va_list types, char buffer[],
+int flags, int width, int precision, int size);
 int print_unsigned(unsigned int n);
 int print_octal(va_list types, char buffer[],
 int flags, int width, int precision, int size);

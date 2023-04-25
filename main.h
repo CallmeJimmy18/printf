@@ -22,8 +22,14 @@
 struct fmt
 {
 char fmt;
-int (*fn)(va_list, char[], int, int, int, int);
+int (*fn)(va_list);
 };
+struct convert
+{
+	char *sym;
+	int (*f)(va_list);
+};
+typedef struct convert conver_t;
 /**
  * typedef struct fmt fmt_t - Struct op
  *
@@ -36,20 +42,15 @@ int handle_print(const char *fmt, int *i,
 va_list list, char buffer[], int flags, int width, int precision, int size);
 //// FUNCTIONS
 // Funtions to print chars and strings
-int print_char(va_list types, char buffer[],
-int flags, int width, int precision, int size);
-int print_string(va_list types, char buffer[],
-int flags, int width, int precision, int size);
-int print_percent(va_list types, char buffer[],
-int flags, int width, int precision, int size);
+int print_char(va_list args);
+int print_string(va_list args);
+int print_percent(__attribute__((unused))va_list args);
 int _putchar(char c);
 // Functions to print numbers
-int print_int(va_list types, char buffer[],
-int flags, int width, int precision, int size);
-int print_binary(va_list types, char buffer[],
-int flags, int width, int precision, int size);
-int print_unsigned(va_list types, char buffer[],
-int flags, int width, int precision, int size);
+int print_number(va_list args);
+int print_int(va_list args);
+int print_binary(va_list args);
+int print_unsigned(unsigned int n);
 int print_octal(va_list types, char buffer[],
 int flags, int width, int precision, int size);
 int print_hexadecimal(va_list types, char buffer[],
@@ -69,6 +70,7 @@ int get_flags(const char *format, int *i);
 int get_width(const char *format, int *i, va_list list);
 int get_precision(const char *format, int *i, va_list list);
 int get_size(const char *format, int *i);
+int parser(const char *format, conver_t function_list[], va_list args);
 //Function to print string in reverse
 int print_reverse(va_list types, char buffer[],
 int flags, int width, int precision, int size);

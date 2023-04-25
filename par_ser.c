@@ -1,4 +1,6 @@
-#include main.h"
+#include "main.h"
+#include <stdarg.h>
+#include <stdio.h>
 /**
  * parser - checkes the code
  * @format: this is a character string
